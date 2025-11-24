@@ -1,0 +1,13 @@
+[project]
+name = "tasks4"
+version = "0.1.0"
+description = "CSC299 tasks4: summarize task paragraphs via OpenAI Chat Completions"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = ["openai>=1.0.0"]  # you already have it, this keeps it explicit
+
+[project.scripts]
+tasks4 = "tasks4.main:main"
+
+[tool.uv]
+package = true
