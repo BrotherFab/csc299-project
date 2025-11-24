@@ -1,0 +1,19 @@
+{
+  "name": "task-manager-cli",
+  "version": "1.0.0",
+  "description": "Simple task manager CLI",
+  "main": "src/cli.js",
+  "bin": {
+    "task": "./src/cli.js"
+  },
+  "scripts": {
+    "test": "node --test tests/storage.test.js && node --test tests/task.test.js",
+    "start": "node src/cli.js"
+  },
+  "keywords": ["cli", "task", "manager"],
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
