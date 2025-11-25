@@ -45,7 +45,7 @@ def _print_note(note: dict) -> None:
         print("    " + note["body"].replace("\n", "\n    "))
 
 
-def main() -> None:
+def main():
     print("=== CSC299 Final PKMS ===")
     print("Type 'help' for commands. 'quit' to exit.\n")
 
@@ -72,24 +72,22 @@ def main() -> None:
         if cmd in {"quit", "exit", "q"}:
             print("Goodbye.")
             break
+
         if cmd == "help":
             print(HELP_TEXT)
             continue
 
-        # ---- Task commands ----
-        # ---- Task commands ----
+        # ======================================================
+        # TASK COMMANDS
+        # ======================================================
+
         if cmd == "add" and len(args) >= 1 and args[0] == "task":
-            # Description can come from the command line or prompt
             desc = " ".join(args[1:]).strip()
             if not desc:
                 desc = input("Task description: ").strip()
 
-            # Ask for optional due date
-            due = input("Due date (optional, e.g., 2025-12-01): ").strip()
-            if not due:
-                due = None
+            due = input("Due date (optional, e.g., 2025-12-01): ").strip() or None
 
-            # Ask for optional tags
             tags_input = input("Tags (comma-separated, optional): ").strip()
             tags = [t.strip() for t in tags_input.split(",") if t.strip()] if tags_input else []
 
@@ -101,7 +99,7 @@ def main() -> None:
                 print(f"Error: {e}")
             continue
 
-        if cmd == "list" and len(args) == 1 and args[0] == "tasks":
+        if cmd == "list" and args == ["tasks"]:
             tasks = list_tasks()
             if not tasks:
                 print("No tasks yet.")
@@ -144,7 +142,30 @@ def main() -> None:
                 print("No such task.")
             continue
 
-        if cmd == "list" and len(args) == 1 and args[0] == "notes":
+        # ======================================================
+        # NOTE COMMANDS
+        # ======================================================
+
+        if cmd == "add" and args == ["note"]:
+            title = input("Note title (optional): ").strip()
+            print("Enter note body (blank line to finish):")
+            body_lines = []
+            while True:
+                line = input()
+                if line.strip() == "":
+                    break
+                body_lines.append(line)
+            body = "\n".join(body_lines)
+
+            tags_input = input("Tags (comma-separated, optional): ").strip()
+            tags = [t.strip() for t in tags_input.split(",") if t.strip()] if tags_input else []
+
+            note = add_note(title, body, tags=tags)
+            print("Added note:")
+            _print_note(note)
+            continue
+
+        if cmd == "list" and args == ["notes"]:
             notes = list_notes()
             if not notes:
                 print("No notes yet.")
@@ -175,17 +196,18 @@ def main() -> None:
                 print("No such note.")
             continue
 
-        # ---- Agent commands ----
-        if cmd == "agent" and len(args) == 1 and args[0] == "summary":
+        # ======================================================
+        # AGENT COMMANDS
+        # ======================================================
+
+        if cmd == "agent" and args == ["summary"]:
             print("Running AI summary agent...\n")
-            text = summarize_open_tasks_and_notes()
-            print(text)
+            print(summarize_open_tasks_and_notes())
             continue
 
-        if cmd == "agent" and len(args) == 1 and args[0] == "plan":
+        if cmd == "agent" and args == ["plan"]:
             print("Running AI planning agent...\n")
-            text = suggest_plan_for_today()
-            print(text)
+            print(suggest_plan_for_today())
             continue
 
         print("Unknown command. Type 'help' for list of commands.")
